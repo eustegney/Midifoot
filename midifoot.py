@@ -103,6 +103,7 @@ class MainWindow(QWidget):
         self.CvKeyList.horizontalHeader().setAutoFillBackground(True)
         self.CvKeyList.setAlternatingRowColors(True)
         self.CvKeyList.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.CvKeyList.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
         self.PbKeyNew = QPushButton(self)
         self.PbKeyNew.setGeometry(QRect(10, 340, 61, 23))
@@ -132,6 +133,14 @@ class MainWindow(QWidget):
         self.HsRefreshRate.valueChanged[int].connect(self.refresh_rate_change)
         self.PbPresetSave.clicked.connect(self.save_preset)
         self.CvKeyList.itemChanged.connect(self.changes_saved)
+        self.CvKeyList.doubleClicked.connect(self.input_button_form)
+        self.PbKeyNew.clicked.connect(self.input_button_form)
+
+    def input_button_form(self):
+        """Show form for input new button parameters and return values
+
+        """
+        pass
 
     def fill_ui(self):
         global INI_NAME, CONFIG, GAMEPAD_DEV_LIST, MIDI_DEV_LIST, REFRESH_RATE
