@@ -1,7 +1,8 @@
 from PyQt5.QtWidgets import QApplication, QWidget, QGroupBox, QComboBox, \
                             QPushButton, QLabel, QSlider, QLCDNumber, \
                             QTableWidget, QAction, QLineEdit, QAbstractItemView, \
-                            QTableWidgetItem, QStyleFactory, QMessageBox
+                            QTableWidgetItem, QStyleFactory, QMessageBox, QVBoxLayout, \
+                            QFrame, QDialogButtonBox
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import QRect, Qt
 from sys import argv, exit
@@ -140,7 +141,9 @@ class MainWindow(QWidget):
         """Show form for input new button parameters and return values
 
         """
-        pass
+        input_window = NewControlWindow(self)
+        input_window.show()
+
 
     def fill_ui(self):
         global INI_NAME, CONFIG, GAMEPAD_DEV_LIST, MIDI_DEV_LIST, REFRESH_RATE
@@ -428,13 +431,115 @@ class MainWindow(QWidget):
 
 class NewControlWindow(QWidget):
 
-    def __init__(self):
+    def __init__(self, parent=None):
+        print("init...")
+        super(NewControlWindow, self).__init__(parent)
+
         self.init_ui()
+        self.setup_defaults()
         self.assign_actions()
         self.fill_ui()
-        self.show()
+
 
     def init_ui(self):
+        self.setWindowFlags(Qt.Dialog | Qt.WindowSystemMenuHint)
+        self.setWindowModality(Qt.WindowModal)
+        self.setWindowTitle("New control")
+        self.setFixedSize(281, 252)
+        self.verticalLayoutWidget = QWidget(self)
+        self.verticalLayoutWidget.setGeometry(QRect(10, 10, 261, 231))
+        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+        self.verticalLayout = QVBoxLayout(self.verticalLayoutWidget)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setObjectName("verticalLayout")
+
+        self.GbMain = QGroupBox(self.verticalLayoutWidget)
+        self.GbMain.setObjectName("GbMain")
+        #self.GbMain.setGeometry(QRect(10, 10, 261, 231))
+
+        self.LbControlNum = QLabel(self.GbMain)
+        self.LbControlNum.setGeometry(QRect(10, 30, 51, 20))
+        self.LbControlNum.setObjectName("LbControlNum")
+        self.LbControlNum.setText("Control №")
+
+        self.CbControlNum = QComboBox(self.GbMain)
+        self.CbControlNum.setGeometry(QRect(85, 30, 161, 20))
+        self.CbControlNum.setCurrentText("")
+        self.CbControlNum.setFrame(True)
+        self.CbControlNum.setObjectName("CbControlNum")
+
+        self.LbHint = QLabel(self.GbMain)
+        self.LbHint.setGeometry(QRect(40, 50, 186, 13))
+        self.LbHint.setObjectName("LbHint")
+        self.LbHint.setText("Press button or move axe to choose")
+
+        self.line = QFrame(self.GbMain)
+        self.line.setGeometry(QRect(10, 70, 239, 3))
+        self.line.setFrameShape(QFrame.HLine)
+        self.line.setFrameShadow(QFrame.Sunken)
+        self.line.setObjectName("line")
+
+        self.LbType = QLabel(self.GbMain)
+        self.LbType.setGeometry(QRect(10, 80, 24, 20))
+        self.LbType.setObjectName("LbType")
+        self.LbType.setText("Type")
+
+        self.LbFunction = QLabel(self.GbMain)
+        self.LbFunction.setGeometry(QRect(10, 110, 41, 20))
+        self.LbFunction.setObjectName("LbFunction")
+        self.LbFunction.setText("Function")
+
+        self.LbCommand = QLabel(self.GbMain)
+        self.LbCommand.setGeometry(QRect(10, 140, 47, 20))
+        self.LbCommand.setObjectName("LbCommand")
+        self.LbCommand.setText("Command")
+
+        self.LbPort = QLabel(self.GbMain)
+        self.LbPort.setGeometry(QRect(10, 170, 20, 20))
+        self.LbPort.setObjectName("LbPort")
+        self.LbPort.setText("Port")
+
+        self.LeType = QLineEdit(self.GbMain)
+        self.LeType.setEnabled(False)
+        self.LeType.setGeometry(QRect(80, 80, 171, 20))
+        self.LeType.setObjectName("LeType")
+
+        self.CbFunction = QComboBox(self.GbMain)
+        self.CbFunction.setGeometry(QRect(80, 110, 171, 20))
+        self.CbFunction.setObjectName("CbFunction")
+
+        self.LeCommand = QLineEdit(self.GbMain)
+        self.LeCommand.setGeometry(QRect(80, 140, 81, 20))
+        self.LeCommand.setInputMethodHints(Qt.ImhDigitsOnly)
+        self.LeCommand.setInputMask("")
+        self.LeCommand.setText("")
+        self.LeCommand.setObjectName("LeCommand")
+
+        self.LePort = QLineEdit(self.GbMain)
+        self.LePort.setGeometry(QRect(80, 170, 81, 20))
+        self.LePort.setInputMethodHints(Qt.ImhDigitsOnly)
+        self.LePort.setObjectName("LePort")
+
+        self.LbCommandHint = QLabel(self.GbMain)
+        self.LbCommandHint.setGeometry(QRect(180, 140, 47, 13))
+        self.LbCommandHint.setObjectName("LbCommandHint")
+        self.LbCommandHint.setText("0...127")
+
+        self.LbPortHint = QLabel(self.GbMain)
+        self.LbPortHint.setGeometry(QRect(180, 170, 47, 13))
+        self.LbPortHint.setObjectName("LbPortHint")
+        self.LbPortHint.setText("0...127")
+
+        self.verticalLayout.addWidget(self.GbMain)
+
+        self.BbOkCancel = QDialogButtonBox(self.verticalLayoutWidget)
+        self.BbOkCancel.setStandardButtons(QDialogButtonBox.Cancel | QDialogButtonBox.Save)
+        self.BbOkCancel.setObjectName("BbOkCancel")
+
+        self.verticalLayout.addWidget(self.BbOkCancel)
+
+
+    def setup_defaults(self):
         pass
     def assign_actions(self):
         pass
