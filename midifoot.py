@@ -438,7 +438,6 @@ class NewControlWindow(QWidget):
         self.assign_actions()
         self.fill_ui()
 
-
     def init_ui(self):
         self.setWindowFlags(Qt.Dialog)
         self.setWindowModality(Qt.WindowModal)
@@ -459,11 +458,6 @@ class NewControlWindow(QWidget):
 
         self.CbControlNum = QComboBox(self.GbMain)
         self.CbControlNum.setGeometry(QRect(85, 30, 161, 20))
-        self.CbControlNum.setCurrentText("")
-
-        self.LbHint = QLabel(self.GbMain)
-        self.LbHint.setGeometry(QRect(40, 50, 186, 13))
-        self.LbHint.setText("Press button or move axe to choose")
 
         self.line = QFrame(self.GbMain)
         self.line.setGeometry(QRect(10, 70, 239, 3))
@@ -487,7 +481,6 @@ class NewControlWindow(QWidget):
         self.LbPort.setText("Port")
 
         self.LeType = QLineEdit(self.GbMain)
-        #self.LeType.setEnabled(False)
         self.LeType.setGeometry(QRect(80, 80, 171, 20))
 
         self.CbFunction = QComboBox(self.GbMain)
@@ -516,13 +509,32 @@ class NewControlWindow(QWidget):
 
         self.verticalLayout.addWidget(self.BbOkCancel)
 
-
     def setup_defaults(self):
-        pass
+
+        # self.CbControlNum filling
+        global GAMEPAD_DEV
+        gamepad = pygame.joystick.Joystick(GAMEPAD_DEV)
+        axes = gamepad.get_numaxes()
+        buttons = gamepad.get_numbuttons()
+        for button in range(1, buttons + 1):
+            self.CbControlNum.addItem('Button ' + str(button))
+        for axe in range(1, axes + 1):
+            self.CbControlNum.addItem('Axe ' + str(axe))
+
+        self.CbFunction.addItem('Program change')
+        self.CbFunction.addItem('Push button')
+        self.CbFunction.addItem('Trigger button')
+
+        self.LeCommand.setText('0')
+        self.LePort.setText('0')
+
+
     def assign_actions(self):
         pass
+
     def fill_ui(self):
         pass
+
     def on_close(self, choice):
         pass
 
