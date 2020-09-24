@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QApplication, QWidget, QGroupBox, QComboBox, \
                             QPushButton, QLabel, QSlider, QLCDNumber, \
-                            QTableWidget, QAction, QLineEdit, \
+                            QTableWidget, QAction, QLineEdit, QAbstractItemView, \
                             QTableWidgetItem, QStyleFactory, QMessageBox
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import QRect, Qt
@@ -102,6 +102,7 @@ class MainWindow(QWidget):
         self.CvKeyList.horizontalHeader().setDefaultAlignment(Qt.AlignLeft)
         self.CvKeyList.horizontalHeader().setAutoFillBackground(True)
         self.CvKeyList.setAlternatingRowColors(True)
+        self.CvKeyList.setSelectionBehavior(QAbstractItemView.SelectRows)
 
         self.PbKeyNew = QPushButton(self)
         self.PbKeyNew.setGeometry(QRect(10, 340, 61, 23))
@@ -366,7 +367,7 @@ class MainWindow(QWidget):
     def mididev_load(self):
         """MIDI devices initializing
 
-        :returns midi_dev_list[[port, 'name1'], [port, 'name2] ... ]
+        :returns global midi_dev_list[[port, 'name1'], [port, 'name2] ... ]
         or [0, 'Midi device not found']
 
         """
@@ -414,7 +415,6 @@ class MainWindow(QWidget):
             self.PbPresetSave.setEnabled(True)
         else:
             self.PbPresetSave.setDisabled(True)
-
 
 
 if __name__ == '__main__':
