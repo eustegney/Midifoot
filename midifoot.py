@@ -426,6 +426,23 @@ class MainWindow(QWidget):
             self.PbPresetSave.setDisabled(True)
 
 
+class NewControlWindow(QWidget):
+
+    def __init__(self):
+        self.init_ui()
+        self.assign_actions()
+        self.fill_ui()
+        self.show()
+
+    def init_ui(self):
+        pass
+    def assign_actions(self):
+        pass
+    def fill_ui(self):
+        pass
+    def on_close(self, choice):
+        pass
+
 if __name__ == '__main__':
 
     app = QApplication(argv)
