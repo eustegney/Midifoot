@@ -48,9 +48,8 @@ class Gamepad:
     def get_axe_count(self):
         return self.axe_count
 
-    def get_event(self):
-            id = self.id
-            joy_event_list = JoystickEvents.get_joy_event_list(id) #FIXME:TypeError: get_joy_event_list() missing 1 required positional argument: 'joy'
+    def get_event(self, joy_event_list):
+
             for event in joy_event_list:
                 if event[1] == 10:  #JOYBUTTONDOWN
                     event_return = [True, event[1], event[2]]
@@ -67,8 +66,8 @@ class Gamepad:
 
 class JoystickEvents:
 
-    def __init__(self,):
-        self.event_list = []
+    def __init__(self):
+        self.event_list = [[],[]]
 
     def append_events_to_event_list(self):
         """Check joystick events and put to self.event_list
@@ -79,33 +78,36 @@ class JoystickEvents:
 
         for event in pygame.event.get():
             if event.type == 10:  #JOYBUTTONDOWN
-                append_element = [event.joy, event.type, event.button]
-                self.event_list.append(append_element)
+                append_element = [event.type, event.button]
+                self.event_list[event.joy].append(append_element)
             elif event.type == 11:  # JOYBUTTONUP
-                append_element = [event.joy, event.type, event.button]
-                self.event_list.append(append_element)
+                append_element = [event.type, event.button]
+                self.event_list[event.joy].append(append_element)
             elif event.type == 7:  # JOYAXISMOTION
-                append_element = [event.joy, event.type, event.axis, event.value]
-                self.event_list.append(append_element)
+                append_element = [event.type, event.axis, event.value]
+                self.event_list[event.joy].append(append_element)
 
     def get_joy_event_list(self, joy):
         """Move all events for custom joystick to list in return
 
         """
-
         joy_event_list = []
-        self.append_events_to_event_list()
-
-        for index in range(len(self.event_list)):
-            if self.event_list[index][0] == joy:  #if event of joystick(id)
-                joy_event_list.append(self.event_list.pop(index))
+        index = 0
+        for event in self.event_list[joy]:
+            joy_event_list.append(event)
+            self.event_list[joy].pop(index)
+            index += 1
         return joy_event_list
 
+gamepad1_id = 0
+gamepad2_id = 1
 
 pygame.init()
-#ev = JoystickEvents
-j = Gamepad(1)
-j.init()
+ev = JoystickEvents()
+j0 = Gamepad(0)
+j1 = Gamepad(1)
+j0.init()
+j1.init()
 
 
 a = True
@@ -114,8 +116,9 @@ while a:
     timer.tick(100)
 
     if pygame.event.peek():
-        a = j.get_event()
-        if a[0]:
-            print(a)
+        ev.append_events_to_event_list()
 
-
+    for dev_id in range(pygame.joystick.get_count()):
+        for index in range(len(ev.event_list[dev_id])):
+            aa = ev.event_list[dev_id].pop()
+            print(aa)
