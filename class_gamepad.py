@@ -104,14 +104,13 @@ gamepad2_id = 1
 
 pygame.init()
 ev = JoystickEvents()
-j0 = Gamepad(0)
-j1 = Gamepad(1)
+j0 = Gamepad(gamepad1_id)
+j1 = Gamepad(gamepad2_id)
 j0.init()
 j1.init()
-
-
 a = True
 timer = pygame.time.Clock()
+
 while a:
     timer.tick(100)
 
