@@ -67,7 +67,7 @@ class Gamepad:
 class JoystickEvents:
 
     def __init__(self):
-        self.event_list = [[],[]]
+        self.event_list = [[], []]
 
     def append_events_to_event_list(self):
         """Check joystick events and put to self.event_list
@@ -76,16 +76,17 @@ class JoystickEvents:
 
         """
 
-        for event in pygame.event.get():
-            if event.type == 10:  #JOYBUTTONDOWN
-                append_element = [event.type, event.button]
-                self.event_list[event.joy].append(append_element)
-            elif event.type == 11:  # JOYBUTTONUP
-                append_element = [event.type, event.button]
-                self.event_list[event.joy].append(append_element)
-            elif event.type == 7:  # JOYAXISMOTION
-                append_element = [event.type, event.axis, event.value]
-                self.event_list[event.joy].append(append_element)
+        if pygame.event.peek():
+            for event in pygame.event.get():
+                if event.type == 10:  #JOYBUTTONDOWN
+                    append_element = [event.type, event.button]
+                    self.event_list[event.joy].append(append_element)
+                elif event.type == 11:  # JOYBUTTONUP
+                    append_element = [event.type, event.button]
+                    self.event_list[event.joy].append(append_element)
+                elif event.type == 7:  # JOYAXISMOTION
+                    append_element = [event.type, event.axis, event.value]
+                    self.event_list[event.joy].append(append_element)
 
     def get_joy_event_list(self, joy):
         """Move all events for custom joystick to list in return
@@ -99,25 +100,27 @@ class JoystickEvents:
             index += 1
         return joy_event_list
 
-gamepad1_id = 0
-gamepad2_id = 1
 
-pygame.init()
-ev = JoystickEvents()
-j0 = Gamepad(gamepad1_id)
-j1 = Gamepad(gamepad2_id)
-j0.init()
-j1.init()
-a = True
-timer = pygame.time.Clock()
+if __name__ == '__main__':
 
-while a:
-    timer.tick(100)
+    gamepad1_id = 0
+    gamepad2_id = 1
 
-    if pygame.event.peek():
+    pygame.init()
+    ev = JoystickEvents()
+    j0 = Gamepad(gamepad1_id)
+    j1 = Gamepad(gamepad2_id)
+    j0.init()
+    j1.init()
+    a = True
+    timer = pygame.time.Clock()
+
+    while a:
+        timer.tick(100)
+
         ev.append_events_to_event_list()
 
-    for dev_id in range(pygame.joystick.get_count()):
-        for index in range(len(ev.event_list[dev_id])):
-            aa = ev.event_list[dev_id].pop()
-            print(aa)
+        for dev_id in range(pygame.joystick.get_count()):
+            for index in range(len(ev.event_list[dev_id])):
+                aa = ev.event_list[dev_id].pop()
+                print(aa)
