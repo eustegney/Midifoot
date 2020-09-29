@@ -89,12 +89,12 @@ class Gamepad:
     def get_event(self, joystick_events_instance):
         """Return event for current device, and delete it from event_list
 
-        Event is a list:
-            for button [event, button number]
-                event:  10 - button down
-                        11 - button up
-            for axe [event, axis number, value]
-                event: 7 - axis move
+        Event is a dict:
+            for button [type, button number]
+                type:  10 - button down
+                       11 - button up
+            for axe [type, axis, value]
+                type:  7 - axis move
                 value: float from -1 to 1 (0 - center)
 
         :returns list
@@ -143,13 +143,13 @@ class JoystickEvents:
         if pygame.event.peek():
             for event in pygame.event.get():
                 if event.type == 10:  # JOYBUTTONDOWN
-                    append_element = [event.type, event.button]
+                    append_element = {'type': event.type, 'button': event.button}
                     self.event_list[event.joy].append(append_element)
                 elif event.type == 11:  # JOYBUTTONUP
-                    append_element = [event.type, event.button]
+                    append_element = {'type': event.type, 'button': event.button}
                     self.event_list[event.joy].append(append_element)
                 elif event.type == 7:  # JOYAXISMOTION
-                    append_element = [event.type, event.axis, event.value]
+                    append_element = {'type': event.type, 'axis': event.axis, 'value': event.value}
                     self.event_list[event.joy].append(append_element)
 
     def get_joy_event_list(self, joy):
@@ -181,7 +181,14 @@ if __name__ == '__main__':
         timer.tick(100)
 
         if j0.is_new_events(ev):
-            print('Gamepad 0: ', j0.get_event(ev))
+            a = j0.get_event(ev)  # a - dictionary
+
+            if a['type'] == 10:
+                print('Gamepad 0: ', a['type'], a['button'])
+            if a['type'] == 11:
+                print('Gamepad 0: ', a['type'], a['button'])
+            if a['type'] == 7:
+                print('Gamepad 0: ', a['type'], a['axis'], a['value'])
 
         if j1.is_new_events(ev):
             print('Gamepad 1: ', j1.get_event(ev))

@@ -144,7 +144,6 @@ class MainWindow(QWidget):
         input_window = NewControlWindow(self)
         input_window.show()
 
-
     def fill_ui(self):
         global INI_NAME, CONFIG, GAMEPAD_DEV_LIST, MIDI_DEV_LIST, REFRESH_RATE
 
